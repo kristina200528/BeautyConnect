@@ -16,10 +16,10 @@
 
                     <dl class="row">
                         <dt class="col-sm-4">Имя:</dt>
-                        <dd class="col-sm-8">${user.firstName}</dd>
+                        <dd class="col-sm-8">${user.firstName!"-"}</dd>
 
                         <dt class="col-sm-4">Фамилия:</dt>
-                        <dd class="col-sm-8">${user.lastName}</dd>
+                        <dd class="col-sm-8">${user.lastName!"-"}</dd>
 
                         <dt class="col-sm-4">Имя пользователя:</dt>
                         <dd class="col-sm-8">${user.username}</dd>
@@ -28,7 +28,7 @@
                         <dd class="col-sm-8">${user.email}</dd>
 
                         <dt class="col-sm-4">Возраст:</dt>
-                        <dd class="col-sm-8">${user.age}</dd>
+                        <dd class="col-sm-8">${user.age!"-"}</dd>
 
                         <dt class="col-sm-4">Роль:</dt>
                         <dd class="col-sm-8">
@@ -57,9 +57,8 @@
                             <dd class="col-sm-8">${master.contacts!''}</dd>
                         </dl>
                     </#if>
-
                     <div class="d-grid gap-2 mt-4">
-                        <a class="btn btn-primary" href="/edit-profile">Редактировать профиль</a>
+                        <a class="btn btn-secondary mt-3" href="/home">Главная страница</a>
                         <a class="btn btn-danger" href="/logout">Выйти</a>
                     </div>
                 </div>

@@ -22,14 +22,10 @@ public class ProfileController {
 
     private final UserService userService;
     private final MasterService masterService;
-    private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
 
     @GetMapping
     public String profile(Model model, Principal principal) {
-        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
-        boolean isAdmin = authentication.getAuthorities().stream().anyMatch(grantedAuthority -> ROLE_ADMIN.equals(grantedAuthority.getAuthority()));
-        model.addAttribute("isAdmin",isAdmin);
         Optional<User> user = userService.findByUsername(principal.getName());
 
         if (user.isPresent()) {

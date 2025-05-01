@@ -15,11 +15,11 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         HttpSecurity httpSecurity = http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/hello").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/registration").anonymous()
                         .anyRequest().permitAll())
                 .formLogin(formLogin -> formLogin
-                        .defaultSuccessUrl("/home", true) // true - всегда перенаправлять, даже если пользователь пытался зайти на другую страницу
+                        .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )
                 .rememberMe(Customizer.withDefaults());

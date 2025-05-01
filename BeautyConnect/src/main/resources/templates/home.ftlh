@@ -13,11 +13,13 @@
             <h1 class="mt-5">Добро пожаловать, ${userName}!</h1>
             <p>Вы успешно вошли в систему.</p>
 
+            <#if isAdmin>
+                <a class="btn btn-secondary mt-3" href="/admin">Панель администратора</a>
+            </#if>
             <a class="btn btn-secondary mt-3" href="/profile">Мой профиль</a>
             <a class="btn btn-danger mt-3" href="/logout">Выйти</a>
         </div>
     </div>
 </div>
-
 </body>
 </html>

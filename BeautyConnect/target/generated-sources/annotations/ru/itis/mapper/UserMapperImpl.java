@@ -9,7 +9,7 @@ import ru.itis.entity.User;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-04-26T00:50:35+0300",
+    date = "2025-05-01T18:59:54+0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
