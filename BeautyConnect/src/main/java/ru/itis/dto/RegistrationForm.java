@@ -18,11 +18,12 @@ public class RegistrationForm {
     @NotBlank(message = "Фамилия не может быть пустой")
     private String lastName;
 
-    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Имя пользователя может содержать только буквы, цифры и подчеркивания")
+    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Имя пользователя может содержать только английские буквы, цифры и подчеркивания")
+    @Size(min = 2, max = 50, message = "Имя пользователя должно содержать от 2 до 50 символов")
     @NotBlank(message = "Имя пользователя не может быть пустым")
     private String username;
 
-    @Min(16)
+    @Min(value = 16, message = "Возраст должен быть больше 16")
     private Integer age;
 
     @Email(message = "Некорректный формат email")

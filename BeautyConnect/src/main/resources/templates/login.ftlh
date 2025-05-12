@@ -15,20 +15,6 @@
                 <div class="card-body">
                     <h3 class="card-title text-center mb-4">Вход в систему</h3>
 
-                    <!-- Ошибка неверных данных -->
-                    <#if error??>
-                        <div class="alert alert-danger" role="alert">
-                            Неверное имя пользователя или пароль.
-                        </div>
-                    </#if>
-
-                    <!-- Ошибка блокировки -->
-                    <#if blocked??>
-                        <div class="alert alert-warning" role="alert">
-                            Ваш аккаунт заблокирован.
-                        </div>
-                    </#if>
-
                     <form action="/login" method="post">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                         <div class="mb-3">
@@ -39,7 +25,25 @@
                             <label for="password" class="form-label">Пароль</label>
                             <input type="password" id="password" name="password" class="form-control" required>
                         </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="rememberMe" name="remember-me">
+                            <label class="form-check-label" for="rememberMe">
+                                Запомнить меня
+                            </label>
+                        </div>
+
                         <button type="submit" class="btn btn-primary w-100">Войти</button>
+
+                        <#if errorMessage??>
+                            <div class="form-text text-danger mt-2 text-center">
+                                ${errorMessage}
+                            </div>
+                        </#if>
+                        <#if blockMessage??>
+                            <div class="form-text text-danger mt-2 text-center">
+                                ${blockMessage}
+                            </div>
+                        </#if>
                     </form>
 
                     <div class="mt-4 text-center">

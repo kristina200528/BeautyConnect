@@ -21,65 +21,89 @@
                             ${errorMessage}
                         </div>
                     </#if>
+
+
                     <@spring.bind "registrationForm"/>
-                    <form action="register" method="post" <#if spring.status.errors?exists>class="was-validated"</#if>>
+                    <form action="/register" method="post" <#if spring.status.errors?exists>class="was-validated"</#if>>
                         <!-- Поле для имени -->
                         <div class="mb-3">
                             <label for="firstName" class="form-label">Имя</label>
-                            <@spring.formInput "registrationForm.firstName" "class=\"form-control\" id=\"firstName\" name=\"firstName\" required" "text"/>
-                            <@spring.showErrors "<br>" "invalid-feedback"/>
+                            <input type="text" class="form-control" id="firstName" name="firstName"
+                                   value="${registrationForm.firstName!''}" required> <!-- Используем безопасный доступ с дефолтным значением -->
+                            <#if bindingResult?? && bindingResult.hasFieldErrors('firstName')>
+                                <div class="text-danger">${bindingResult.getFieldError('firstName').defaultMessage}</div>
+                            </#if>
                         </div>
+
 
                         <!-- Поле для фамилии -->
                         <div class="mb-3">
                             <label for="lastName" class="form-label">Фамилия</label>
-                            <@spring.formInput "registrationForm.lastName" "class=\"form-control\" id=\"lastName\" name=\"lastName\" required" "text"/>
-                            <@spring.showErrors "<br>" "invalid-feedback"/>
+                            <input type="text" class="form-control" id="lastName" name="lastName"
+                                   value="${registrationForm.lastName!''}" required> <!-- Используем безопасный доступ с дефолтным значением -->
+                            <#if bindingResult?? && bindingResult.hasFieldErrors('lastName')>
+                                <div class="text-danger">${bindingResult.getFieldError('lastName').defaultMessage}</div>
+                            </#if>
                         </div>
 
                         <!-- Поле для возраста -->
                         <div class="mb-3">
                             <label for="age" class="form-label">Возраст</label>
-                            <@spring.formInput "registrationForm.age" "class=\"form-control\" id=\"age\" name=\"age\" min=\"1\" max=\"120\" required" "number"/>
-                            <@spring.showErrors "<br>" "invalid-feedback"/>
+                            <input type="number" class="form-control" id="age" name="age"
+                                   value="${registrationForm.age!''}" min="1" max="120" required>
+                            <#if bindingResult?? && bindingResult.hasFieldErrors('age')>
+                                <div class="text-danger">${bindingResult.getFieldError('age').defaultMessage}</div>
+                            </#if>
                         </div>
 
                         <!-- Поле для имени пользователя -->
                         <div class="mb-3">
                             <label for="username" class="form-label">Имя пользователя</label>
-                            <@spring.formInput "registrationForm.username" "class=\"form-control\" id=\"username\" name=\"username\" required" "text"/>
-                            <@spring.showErrors "<br>" "invalid-feedback"/>
+                            <input type="text" class="form-control" id="username" name="username"
+                                   value="${registrationForm.username!''}" required>
+                            <#if bindingResult?? && bindingResult.hasFieldErrors('username')>
+                                <div class="text-danger">${bindingResult.getFieldError('username').defaultMessage}</div>
+                            </#if>
                         </div>
 
                         <!-- Поле для электронной почты -->
                         <div class="mb-3">
                             <label for="email" class="form-label">Электронная почта</label>
-                            <@spring.formInput "registrationForm.email" "class=\"form-control\" id=\"email\" name=\"email\" required" "text"/>
-                            <@spring.showErrors "<br>" "invalid-feedback"/>
+                            <input type="email" class="form-control" id="email" name="email"
+                                   value="${registrationForm.email!''}" required>
+                            <#if bindingResult?? && bindingResult.hasFieldErrors('email')>
+                                <div class="text-danger">${bindingResult.getFieldError('email').defaultMessage}</div>
+                            </#if>
                         </div>
 
                         <!-- Поле для пароля -->
                         <div class="mb-3">
                             <label for="password" class="form-label">Пароль</label>
-                            <@spring.formInput "registrationForm.password" "class=\"form-control\" id=\"password\" name=\"password\" required" "password"/>
-                            <@spring.showErrors "<br>" "invalid-feedback"/>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                            <#if bindingResult?? && bindingResult.hasFieldErrors('password')>
+                                <div class="text-danger">${bindingResult.getFieldError('password').defaultMessage}</div>
+                            </#if>
                         </div>
 
                         <!-- Поле для подтверждения пароля -->
                         <div class="mb-3">
                             <label for="confirmPassword" class="form-label">Подтвердите пароль</label>
-                            <@spring.formInput "registrationForm.confirmPassword" "class=\"form-control\" id=\"confirmPassword\" name=\"confirmPassword\" required" "password"/>
-                            <@spring.showErrors "<br>" "invalid-feedback"/>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                            <#if bindingResult?? && bindingResult.hasFieldErrors('confirmPassword')>
+                                <div class="text-danger">${bindingResult.getFieldError('confirmPassword').defaultMessage}</div>
+                            </#if>
                         </div>
 
                         <!-- Выбор роли -->
                         <div class="mb-3">
                             <label for="role" class="form-label">Роль</label>
-                            <@spring.formSingleSelect "registrationForm.role" {
-                            "CLIENT": "Клиент",
-                            "MASTER": "Мастер"
-                            } "class=\"form-select\" id=\"role\" required"/>
-                            <@spring.showErrors "<br>" "invalid-feedback"/>
+                            <select class="form-select" id="role" name="role" required>
+                                <option value="CLIENT" <#if registrationForm.role == 'CLIENT'>selected</#if>>Клиент</option>
+                                <option value="MASTER" <#if registrationForm.role == 'MASTER'>selected</#if>>Мастер</option>
+                            </select>
+                            <#if bindingResult?? && bindingResult.hasFieldErrors('role')>
+                                <div class="text-danger">${bindingResult.getFieldError('role').defaultMessage}</div>
+                            </#if>
                         </div>
 
                         <!-- Поля для MASTER -->

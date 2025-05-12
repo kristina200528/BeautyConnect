@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.itis.filter.BlockedUserFilter;
+import ru.itis.handler.CustomAuthenticationFailureHandler;
 import ru.itis.security.details.UserDetailsServiceImpl;
 
 
@@ -23,7 +24,6 @@ import ru.itis.security.details.UserDetailsServiceImpl;
 public class WebSecurityConfiguration {
 
     private final BlockedUserFilter blockedUserFilter;
-    private final UserDetailsServiceImpl userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -31,16 +31,20 @@ public class WebSecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/home", "/logout").authenticated()
-                        .requestMatchers("/registration").anonymous()
+                        .requestMatchers("/registration", "/login").anonymous()
                         .anyRequest().permitAll())
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/home", true)
-                        .failureUrl("/login?error=true")
+                        .failureHandler(customAuthenticationFailureHandler())
                         .permitAll()
                 )
-                .rememberMe(Customizer.withDefaults())
+                .rememberMe(remember -> remember
+                        .key("{configuration.secret.key}")
+                        .tokenValiditySeconds(7 * 24 * 60 * 60)
+                        .rememberMeParameter("remember-me")
+                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
@@ -61,6 +65,11 @@ public class WebSecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
 
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    public CustomAuthenticationFailureHandler customAuthenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
     }
 
 
