@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Регистрация в ZEN</title>
+    <title>Регистрация</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -13,7 +13,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="text-center">Регистрация в ZEN</h3>
+                    <h3 class="text-center">Регистрация</h3>
                 </div>
                 <div class="card-body">
                     <#if errorMessage??>
@@ -22,7 +22,7 @@
                         </div>
                     </#if>
                     <@spring.bind "registrationForm"/>
-                    <form action="registration" method="post" <#if spring.status.errors?exists>class="was-validated"</#if>>
+                    <form action="register" method="post" <#if spring.status.errors?exists>class="was-validated"</#if>>
                         <!-- Поле для имени -->
                         <div class="mb-3">
                             <label for="firstName" class="form-label">Имя</label>

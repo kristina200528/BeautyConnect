@@ -16,6 +16,7 @@
             <#if isAdmin>
                 <a class="btn btn-secondary mt-3" href="/admin">Панель администратора</a>
             </#if>
+            <a class="btn btn-secondary mt-3" href="/masters">Все мастера</a>
             <a class="btn btn-secondary mt-3" href="/profile">Мой профиль</a>
             <a class="btn btn-danger mt-3" href="/logout">Выйти</a>
         </div>

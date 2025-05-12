@@ -2,6 +2,7 @@ package ru.itis.web.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,16 +13,17 @@ import ru.itis.dto.RegistrationForm;
 import ru.itis.exception.UserAlreadyExistException;
 import ru.itis.service.RegistrationService;
 
-
+@Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/registration")
+@RequestMapping("/register")
 public class RegistrationController {
 
     private final RegistrationService service;
 
     @GetMapping
     public String getPage(Model model) {
+        log.info("Registration page requested");
         model.addAttribute("registrationForm", new RegistrationForm());
         return "registration";
     }

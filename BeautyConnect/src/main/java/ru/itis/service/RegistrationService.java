@@ -27,12 +27,12 @@ public class RegistrationService {
     public void createUser(RegistrationForm form) {
         userRepository.findByUsername(form.getUsername())
                 .ifPresent(user -> {
-                    throw new UserAlreadyExistException("User already exist");
+                    throw new UserAlreadyExistException("User with this username already exists");
                 });
 
         userRepository.findByEmail(form.getEmail())
                 .ifPresent(user -> {
-                    throw new UserAlreadyExistException("User already exist");
+                    throw new UserAlreadyExistException("User with this email already exists");
                 });
         String encodedPassword = passwordEncoder.encode(form.getPassword());
 
