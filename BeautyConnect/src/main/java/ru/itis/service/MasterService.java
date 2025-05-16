@@ -32,4 +32,9 @@ public class MasterService {
         return masterRepository.findAllWithUser();
     }
 
+    public boolean isMasterOwner(String username, Long masterId) {
+        MasterProfileDto master=getMasterById(masterId);
+        return master.getUsername().equals(username);
+    }
+
 }

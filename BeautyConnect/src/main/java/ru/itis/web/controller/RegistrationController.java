@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.itis.dto.RegistrationForm;
+import ru.itis.entity.Category;
 import ru.itis.exception.UserAlreadyExistException;
+import ru.itis.service.CategoryService;
 import ru.itis.service.RegistrationService;
 
 import java.security.Principal;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -22,7 +25,8 @@ import java.security.Principal;
 @RequestMapping("/register")
 public class RegistrationController {
 
-    private final RegistrationService service;
+    private final RegistrationService registrationService;
+    private final CategoryService categoryService;
 
     @GetMapping
     public String getPage(Model model, Principal principal) {
@@ -30,6 +34,8 @@ public class RegistrationController {
             return "redirect:/home";
         }
         model.addAttribute("registrationForm", new RegistrationForm());
+        List<Category> specializations=categoryService.getAll();
+        model.addAttribute("specializations", specializations);
         return "registration";
     }
 
@@ -40,11 +46,12 @@ public class RegistrationController {
             bindingResult.rejectValue("confirmPassword", null, "Пароли не совпадают");
         }
         if (bindingResult.hasErrors()) {
+            model.addAttribute("specializations", categoryService.getAll());
             model.addAttribute("bindingResult", bindingResult);
             return "registration";
         }
         try {
-            service.createUser(registrationForm);
+            registrationService.createUser(registrationForm);
         } catch (UserAlreadyExistException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
             return "registration";

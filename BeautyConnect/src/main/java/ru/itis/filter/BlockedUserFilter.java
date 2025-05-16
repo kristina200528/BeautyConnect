@@ -31,7 +31,7 @@ public class BlockedUserFilter extends OncePerRequestFilter {
             Optional<User> user = userRepository.findByUsername(username);
             if (user.isPresent() && user.get().getStatus()== UserStatus.BLOCKED){
                 new SecurityContextLogoutHandler().logout(request, response, auth);
-                //response.sendError(HttpServletResponse.SC_FORBIDDEN, "User is blocked");
+                response.sendRedirect("/login?blocked");
                 return;
             }
         }

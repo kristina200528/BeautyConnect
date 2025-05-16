@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Список пользователей</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
 </head>
 <body>
 <div class="container mt-5">
@@ -32,24 +34,19 @@
                     <td>${user.lastName!"-"}</td>
                     <td>${user.age!"-"}</td>
                     <td>${user.role}</td>
-                    <td>
-                        <#if user.status=="ACTIVE">
+
+                    <td class="status-cell">
+                        <#if user.status == 'ACTIVE'>
                             <span class="badge bg-success">Активный</span>
                         <#else>
                             <span class="badge bg-secondary">Неактивный</span>
                         </#if>
                     </td>
-                    <td>
+                    <td class="action-cell">
                         <#if user.status == 'ACTIVE'>
-                            <form action="/admin/block/${user.id}" method="post">
-                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                                <button type="submit" class="btn btn-danger">Заблокировать</button>
-                            </form>
+                            <button class="btn btn-danger block-btn" data-action="block" data-user-id="${user.id}">Заблокировать</button>
                         <#else>
-                            <form action="/admin/unblock/${user.id}" method="post">
-                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                                <button type="submit" class="btn btn-success">Разблокировать</button>
-                            </form>
+                            <button class="btn btn-success block-btn" data-action="unblock" data-user-id="${user.id}">Разблокировать</button>
                         </#if>
                     </td>
                 </tr>
@@ -62,4 +59,41 @@
     </div>
 </div>
 </body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('.block-btn');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                const userId = this.dataset.userId;
+                const action = this.dataset.action;
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                fetch('/admin/' + action + '/' + userId, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        [csrfHeader]: csrfToken
+                    }
+                })
+                    .then(async response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            const errorData = await response.json();
+                            alert("Ошибка: " + (errorData.error || "Неизвестная ошибка"));
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Ошибка:", error);
+                        alert("Ошибка при выполнении запроса");
+                    });
+            });
+        });
+    });
+
+</script>
+
 </html>

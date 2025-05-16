@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "masters")
 @Getter
@@ -21,8 +23,14 @@ public class Master {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
-    private String specialization;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "master_specializations",
+            joinColumns = @JoinColumn(name = "master_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> specialization;
+
 
     @Column(nullable = false)
     private Integer experience;

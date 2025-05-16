@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,6 +22,7 @@ import ru.itis.security.details.UserDetailsServiceImpl;
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
+@EnableMethodSecurity
 public class WebSecurityConfiguration {
 
     private final BlockedUserFilter blockedUserFilter;
@@ -30,9 +32,9 @@ public class WebSecurityConfiguration {
         HttpSecurity httpSecurity = http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/home", "/logout").authenticated()
-                        .requestMatchers("/registration", "/login").anonymous()
-                        .anyRequest().permitAll())
+                        .requestMatchers("/register", "/login").anonymous()
+                        .requestMatchers("error").permitAll()
+                        .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")

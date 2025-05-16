@@ -4,6 +4,9 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import ru.itis.dictonary.UserRole;
+import ru.itis.entity.Category;
+
+import java.util.List;
 
 
 @Data
@@ -38,7 +41,8 @@ public class RegistrationForm {
     private String confirmPassword;
     private UserRole role;
 
-    private String specialization;
+    //private String specialization;
+    private List<Long> specializationsId;
     private Integer experience;
     private String location;
     private String contacts;

@@ -16,21 +16,23 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    public Optional<User> findByEmail(String email){
+
+    public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
-    public Optional<User> findByUsername(String username){
+    public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
-    public List<User> getAllUsers(){
+
+    public List<User> getAllUsers() {
         return userRepository.findAllByOrderByIdAsc();
     }
 
     @Transactional
-    public void blockUser(Long userId){
+    public void blockUser(Long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             throw new UserNotFoundException("Пользователь не найден");
         }
         User user = userOptional.get();
@@ -39,9 +41,9 @@ public class UserService {
     }
 
     @Transactional
-    public void unblockUser(Long userId){
+    public void unblockUser(Long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             throw new UserNotFoundException("Пользователь не найден");
         }
         User user = userOptional.get();

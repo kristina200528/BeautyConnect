@@ -98,8 +98,8 @@
                         <div class="mb-3">
                             <label for="role" class="form-label">Роль</label>
                             <select class="form-select" id="role" name="role" required>
-                                <option value="CLIENT" <#if registrationForm.role == 'CLIENT'>selected</#if>>Клиент</option>
-                                <option value="MASTER" <#if registrationForm.role == 'MASTER'>selected</#if>>Мастер</option>
+                                <option value="CLIENT" <#if (registrationForm.role?? && registrationForm.role == 'CLIENT')>selected</#if>>Клиент</option>
+                                <option value="MASTER" <#if (registrationForm.role?? && registrationForm.role == 'MASTER')>selected</#if>>Мастер</option>
                             </select>
                             <#if bindingResult?? && bindingResult.hasFieldErrors('role')>
                                 <div class="text-danger">${bindingResult.getFieldError('role').defaultMessage}</div>
@@ -110,9 +110,23 @@
                         <div id="masterFields" style="display: none;">
                             <!-- Специализация -->
                             <div class="mb-3">
-                                <label for="specialization" class="form-label">Специализация</label>
-                                <@spring.formInput "registrationForm.specialization" "class=\"form-control\" id=\"specialization\"" "text"/>
+                                <label class="form-label">Специализация</label>
+                                <#list specializations as specialization>
+                                    <div class="form-check">
+                                        <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                                id="specialization_${specialization.id}"
+                                                name="specializationsId"
+                                                value="${specialization.id}"
+                                                <#if registrationForm.specializationsId?? && registrationForm.specializationsId?seq_contains(specialization.id)>checked</#if>>
+                                        <label class="form-check-label" for="specialization_${specialization.id}">
+                                            ${specialization.name}
+                                        </label>
+                                    </div>
+                                </#list>
                             </div>
+
 
                             <!-- Опыт -->
                             <div class="mb-3">

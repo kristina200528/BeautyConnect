@@ -13,7 +13,7 @@
         <div class="col-md-6 text-center">
             <div class="alert alert-danger mt-5">
                 <h2 class="display-4">Упс!</h2>
-                <p class="lead">Произошла какая-то ошибка</p>
+                <p class="lead">Произошла ошибка</p>
                 <a href="/home" class="btn btn-primary mt-3">Вернуться на главную</a>
             </div>
         </div>

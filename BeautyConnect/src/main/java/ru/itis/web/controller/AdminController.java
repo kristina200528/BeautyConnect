@@ -1,16 +1,15 @@
 package ru.itis.web.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.itis.entity.User;
 import ru.itis.service.UserService;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -21,20 +20,23 @@ public class AdminController {
 
     @GetMapping
     public String getAllUsers(Model model) {
-        List<User> users=userService.getAllUsers();
+        List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
         return "admin";
     }
 
     @PostMapping("/block/{userId}")
-    public String blockUser(@PathVariable Long userId){
+    @ResponseBody
+    public Map<String, String> blockUser(@PathVariable Long userId) {
         userService.blockUser(userId);
-        return "redirect:/admin";
+        return ResponseEntity.ok(Map.of("status", "BLOCKED")).getBody();
     }
+
     @PostMapping("/unblock/{userId}")
-    public String unblockUser(@PathVariable Long userId){
+    @ResponseBody
+    public Map<String, String> unblockUser(@PathVariable Long userId) {
         userService.unblockUser(userId);
-        return "redirect:/admin";
+        return Map.of("status","ACTIVE");
     }
 
 
