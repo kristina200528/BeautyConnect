@@ -35,7 +35,7 @@
                         </div>
                     </#if>
                 </div>
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
 
                 <button type="submit" class="btn btn-primary w-100">Записаться</button>
             </form>

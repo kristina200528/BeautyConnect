@@ -13,7 +13,7 @@
 <div class="container mt-4">
     <h2>Добавить новую услугу</h2>
         <form id="serviceForm" class="needs-validation" novalidate>
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
 
             <div class="row g-3 mb-3">
                 <div class="col-md-6">
@@ -60,7 +60,7 @@
         });
 
         const masterId = "${masterId}";
-        const csrfToken = document.querySelector('input[name="${_csrf.parameterName}"]').value;
+        const csrfToken = document.querySelector('input[name="${_csrf.getParameterName()}"]').value;
 
         const body = {
             beautyServiceId: document.getElementById("beautyServiceId").value,

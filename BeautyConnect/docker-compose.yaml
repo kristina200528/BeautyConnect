@@ -13,17 +13,15 @@ services:
       - app-network
 
   app:
-    profiles:
-      - full
     build:
       dockerfile: ./Dockerfile
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/BeautyConnect
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
-      SERVER_PORT: 8082
+      SERVER_PORT: 8090
     ports:
-      - "8082:8082"
+      - "8090:8090"
     depends_on:
       - postgres
     networks:

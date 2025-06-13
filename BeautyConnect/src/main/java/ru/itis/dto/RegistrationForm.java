@@ -42,8 +42,6 @@ public class RegistrationForm {
 
     private List<Long> specializationsId;
     private Integer experience;
-    //private String location;
-    @NotBlank(message = "Город не может быть пустым")
     private String city;
     private String contacts;
 

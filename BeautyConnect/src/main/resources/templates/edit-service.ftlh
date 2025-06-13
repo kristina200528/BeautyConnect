@@ -12,7 +12,7 @@
 
     <form method="post" action="/api/masters/${masterId}/services/${service.id}" id="editServiceForm">
         <input type="hidden" name="_method" value="put"/>
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
 
         <div class="mb-3">
             <label for="beautyServiceId" class="form-label">Услуга</label>
@@ -59,7 +59,7 @@
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': form.querySelector('input[name="${_csrf.parameterName}"]').value
+                'X-CSRF-TOKEN': form.querySelector('input[name="${_csrf.getParameterName()}"]').value
             },
             body: JSON.stringify(formData)
         }).then(response => {

@@ -45,7 +45,7 @@
                                     <#if appointment.status != "CANCELLED" && appointment.status != "COMPLETED">
                                         <div class="mt-2">
                                             <form method="post" action="/appointments/${appointment.id}/cancel" class="d-inline">
-                                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                                <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
                                                 <button type="submit" class="btn btn-sm btn-danger">
                                                     <i class="bi bi-x-circle"></i> Отменить
                                                 </button>

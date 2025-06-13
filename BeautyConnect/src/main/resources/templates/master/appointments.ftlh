@@ -59,7 +59,7 @@
             <td>
                 <#if appt.status != "CANCELLED" && appt.status != "COMPLETED">
                     <form method="post" action="/master/appointments/${appt.id}/cancel" class="d-inline">
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                        <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
                         <button type="submit" class="btn btn-sm btn-danger">
                             <i class="bi bi-x-circle"></i> Отменить
                         </button>

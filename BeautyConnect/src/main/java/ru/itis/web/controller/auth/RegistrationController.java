@@ -1,5 +1,6 @@
 package ru.itis.web.controller.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,6 @@ public class RegistrationController {
 
     private final RegistrationService registrationService;
     private final CategoryService categoryService;
-    private final CitySearchService citySearchService;
 
 
     @GetMapping
@@ -46,7 +46,9 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public String createUser(Model model, @Valid @ModelAttribute("registrationForm") RegistrationForm registrationForm, BindingResult bindingResult) {
+    public String createUser(Model model, @Valid @ModelAttribute("registrationForm") RegistrationForm registrationForm, BindingResult bindingResult, HttpServletRequest request) {
+        CsrfToken token = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        model.addAttribute("_csrf", token);
         if (!registrationForm.getPassword().equals(registrationForm.getConfirmPassword())) {
             bindingResult.rejectValue("confirmPassword", null, "Пароли не совпадают");
         }

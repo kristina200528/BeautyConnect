@@ -16,7 +16,7 @@
                     <h3 class="card-title mb-3">Выход из системы</h3>
                     <p class="text-muted mb-4">Нажмите кнопку ниже, чтобы выйти из системы.</p>
                     <form action="/logout" method="post">
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                        <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
                         <button type="submit" class="btn btn-danger w-100">Выйти</button>
                     </form>
                     <hr>

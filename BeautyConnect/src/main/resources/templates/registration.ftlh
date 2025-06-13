@@ -24,7 +24,7 @@
 
 
                     <@spring.bind "registrationForm"/>
-                    <form action="/register" method="post" <#if spring.status.errors?exists>class="was-validated"</#if>>
+                    <form action="/register" method="post" novalidate>
                         <!-- Поле для имени -->
                         <div class="mb-3">
                             <label for="firstName" class="form-label">Имя</label>
@@ -134,16 +134,9 @@
                                 <@spring.formInput "registrationForm.experience" "class=\"form-control\" id=\"experience\"" "number"/>
                             </div>
 
-<#--                            <!-- Локация &ndash;&gt;-->
-<#--                            <div class="mb-3">-->
-<#--                                <label for="location" class="form-label">Локация</label>-->
-<#--                                <@spring.formInput "registrationForm.location" "class=\"form-control\" id=\"location\"" "text"/>-->
-<#--                            </div>-->
-
-                            <!-- Вместо поля "Локация" -->
                             <div class="mb-3">
                                 <label for="city" class="form-label">Город</label>
-                                <input type="text" class="form-control" id="city" name="city" value="${registrationForm.city!''}" required autocomplete="off"/>
+                                <input type="text" class="form-control" id="city" name="city" value="${registrationForm.city!''}" autocomplete="off"/>
                                 <#if bindingResult?? && bindingResult.hasFieldErrors('city')>
                                     <div class="text-danger">${bindingResult.getFieldError('city').defaultMessage}</div>
                                 </#if>

@@ -9,7 +9,7 @@
 <div class="container py-4">
     <h2>Перенос записи</h2>
     <form method="post">
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
         <div class="mb-3">
             <label class="form-label">Мастер</label>
             <input type="text" class="form-control" value="${appointment.master.user.firstName} ${appointment.master.user.lastName}" disabled />

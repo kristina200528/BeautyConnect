@@ -16,7 +16,7 @@
                     <h3 class="card-title text-center mb-4">Вход в систему</h3>
 
                     <form action="/login" method="post">
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                        <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
                         <div class="mb-3">
                             <label for="username" class="form-label">Имя пользователя</label>
                             <input type="text" id="username" name="username" class="form-control" required autofocus>
