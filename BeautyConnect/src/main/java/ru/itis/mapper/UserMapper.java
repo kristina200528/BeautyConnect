@@ -23,7 +23,7 @@ public interface UserMapper {
     @Mapping(target = "user", source = "user")
     @Mapping(target = "specialization", source = "specializations")
     @Mapping(target = "experience", source = "form.experience")
-    @Mapping(target = "location", source = "form.location")
+    @Mapping(target = "location", source = "form.city")
     @Mapping(target = "contacts", source = "form.contacts")
     Master mapToMaster(RegistrationForm form, User user, List<Category> specializations);
 }

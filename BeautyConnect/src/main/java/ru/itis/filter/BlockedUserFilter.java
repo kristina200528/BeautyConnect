@@ -11,8 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.itis.dictonary.UserStatus;
+import ru.itis.enums.UserStatus;
 import ru.itis.entity.User;
+import ru.itis.exception.UserNotFoundException;
 import ru.itis.repository.UserRepository;
 
 import java.io.IOException;
@@ -28,8 +29,8 @@ public class BlockedUserFilter extends OncePerRequestFilter {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
             String username=auth.getName();
-            Optional<User> user = userRepository.findByUsername(username);
-            if (user.isPresent() && user.get().getStatus()== UserStatus.BLOCKED){
+            User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException("User not found"));
+            if (user.getStatus()== UserStatus.BLOCKED){
                 new SecurityContextLogoutHandler().logout(request, response, auth);
                 response.sendRedirect("/login?blocked");
                 return;

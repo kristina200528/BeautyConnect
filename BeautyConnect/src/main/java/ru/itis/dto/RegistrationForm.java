@@ -3,8 +3,7 @@ package ru.itis.dto;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import ru.itis.dictonary.UserRole;
-import ru.itis.entity.Category;
+import ru.itis.enums.UserRole;
 
 import java.util.List;
 
@@ -41,10 +40,11 @@ public class RegistrationForm {
     private String confirmPassword;
     private UserRole role;
 
-    //private String specialization;
     private List<Long> specializationsId;
     private Integer experience;
-    private String location;
+    //private String location;
+    @NotBlank(message = "Город не может быть пустым")
+    private String city;
     private String contacts;
 
 }

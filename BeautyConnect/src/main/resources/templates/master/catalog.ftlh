@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body class="bg-light">
+<#if isAuthenticated?? && isAuthenticated>
+    <#include "../fragments/menu-for-auth.ftlh">
+<#else>
+    <#include "../fragments/menu-for-guest.ftlh">
+</#if>
 <div class="container py-5">
     <div class="text-center mb-5">
         <h1 class="display-5 fw-bold">Наши мастера</h1>
@@ -31,7 +36,19 @@
                                 <i class="bi bi-person-circle fs-1 text-primary"></i>
                             </div>
                             <h3 class="h5 card-title">${master.user.firstName} ${master.user.lastName}</h3>
-                            <span class="badge bg-primary mb-2">${master.specialization}</span>
+
+                            <#if master.specialization?? && (master.specialization?size > 0)>
+                                <div class="mb-2">
+                                    <#list master.specialization as category>
+                                        <span class="badge bg-primary me-1">${category.name}</span>
+                                    </#list>
+                                </div>
+                            <#else>
+                                <div class="mb-2">
+                                    <span class="badge bg-secondary">Нет специализации</span>
+                                </div>
+                            </#if>
+
                             <ul class="list-unstyled">
                                 <li><i class="bi bi-briefcase me-2"></i> Опыт: ${master.experience} лет</li>
                                 <li><i class="bi bi-geo-alt me-2"></i> ${master.location}</li>
@@ -47,7 +64,6 @@
             </#list>
         </#if>
     </div>
-    <a class="btn btn-secondary mt-3" href="/profile">Мой профиль</a>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

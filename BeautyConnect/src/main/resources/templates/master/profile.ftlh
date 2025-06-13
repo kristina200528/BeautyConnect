@@ -8,7 +8,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body class="bg-light">
+<#if isAuthenticated?? && isAuthenticated>
+    <#include "../fragments/menu-for-auth.ftlh">
+<#else>
+    <#include "../fragments/menu-for-guest.ftlh">
+</#if>
 <div class="container py-4">
+    <#if successMessage??>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            ${successMessage}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+        </div>
+    </#if>
+
     <!-- Кнопка назад -->
     <a href="/masters" class="btn btn-outline-secondary mb-4">
         <i class="bi bi-arrow-left"></i> Назад к списку мастеров
@@ -29,12 +41,14 @@
                 <div class="col-md-7">
                     <h3 class="card-title">${master.firstName} ${master.lastName}</h3>
                     <div class="d-flex flex-wrap gap-2 mb-2">
-                            <span class="badge bg-primary">
-                                <i class="bi bi-briefcase"></i> ${master.specialization}
-                            </span>
-                        <span class="badge bg-success">
-                                <i class="bi bi-award"></i> Опыт: ${master.experience} лет
-                            </span>
+                        <#if master.specialization?? && (master.specialization?size > 0)>
+                            <#list master.specialization as category>
+                                <span class="badge bg-primary"><i class="bi bi-briefcase"></i> ${category.name}</span>
+                            </#list>
+                        <#else>
+                            <span class="badge bg-secondary"> <i class="bi bi-briefcase"></i> Нет специализации</span>
+                        </#if>
+                        <span class="badge bg-success"><i class="bi bi-award"></i> Опыт: ${master.experience} лет</span>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -141,9 +155,9 @@
                                             </#if>
                                         </div>
                                         <div class="card-footer bg-white border-0">
-                                            <button class="btn btn-sm btn-outline-primary w-100">
-                                                <i class="bi bi-calendar-plus"></i> Записаться
-                                            </button>
+                                            <a href="/masters/${master.id}/appointments?serviceId=${service.id}" class="btn btn-outline-primary w-100">
+                                                <i class="bi bi-calendar-plus me-2"></i> Записаться
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

@@ -9,8 +9,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.Accessors;
-import ru.itis.dictonary.UserRole;
-import ru.itis.dictonary.UserStatus;
+import ru.itis.enums.UserRole;
+import ru.itis.enums.UserStatus;
 
 import java.io.Serializable;
 

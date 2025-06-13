@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.itis.dictonary.UserRole;
+import ru.itis.enums.UserRole;
 import ru.itis.entity.Category;
 import ru.itis.entity.Master;
 import ru.itis.entity.User;

@@ -3,9 +3,9 @@ package ru.itis.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.itis.dictonary.UserStatus;
+import ru.itis.dto.MasterProfileDto;
+import ru.itis.enums.UserStatus;
 import ru.itis.entity.User;
-import ru.itis.exception.UserAlreadyExistException;
 import ru.itis.exception.UserNotFoundException;
 import ru.itis.repository.UserRepository;
 
@@ -21,8 +21,12 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(()->new UserNotFoundException("User not found"));
     }
 
     public List<User> getAllUsers() {

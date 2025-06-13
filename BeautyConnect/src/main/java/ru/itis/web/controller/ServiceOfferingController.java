@@ -2,6 +2,7 @@ package ru.itis.web.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,9 +13,7 @@ import ru.itis.dto.MasterProfileDto;
 import ru.itis.dto.ServiceOfferingDto;
 import ru.itis.entity.BeautyService;
 import ru.itis.entity.Category;
-import ru.itis.entity.Master;
-import ru.itis.exception.BeautyServiceNotFoundException;
-import ru.itis.exception.UserNotFoundException;
+import ru.itis.entity.ServiceOffering;
 import ru.itis.service.BeautyServiceService;
 import ru.itis.service.MasterService;
 import ru.itis.service.ServiceOfferingService;
@@ -22,60 +21,36 @@ import ru.itis.service.ServiceOfferingService;
 import java.security.Principal;
 import java.util.List;
 
-@Controller
-@RequestMapping("/masters/{masterId}/services/new")
+@RestController
+@RequestMapping("/api/masters/{masterId}/services")
 @RequiredArgsConstructor
 public class ServiceOfferingController {
 
     private final ServiceOfferingService serviceOfferingService;
-    private final BeautyServiceService beautyServiceService;
-    private final MasterService masterService;
 
-    @GetMapping
+    @PostMapping("/new")
     @PreAuthorize("@masterService.isMasterOwner(#principal.name, #masterId)")
-    public String showCreateServiceForm(@PathVariable Long masterId, Model model, Principal principal) {
-
-        if (!model.containsAttribute("newService")) {
-            model.addAttribute("newService", new ServiceOfferingDto());
+    public ResponseEntity<?> addServiceForMaster(@PathVariable Long masterId, @Valid @RequestBody ServiceOfferingDto newService, BindingResult bindingResult, Principal principal) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
-        model.addAttribute("masterId", masterId);
-
-
-        MasterProfileDto master = masterService.getMasterById(masterId);
-        List<Category> masterCategories = master.getSpecialization();
-
-        List<BeautyService> filteredBeautyServices = beautyServiceService.getAllByCategories(masterCategories);
-
-        model.addAttribute("beautyServices", filteredBeautyServices);
-
-        return "create-service";
+        ServiceOfferingDto serviceOfferingDto=serviceOfferingService.addService(masterId, newService, principal.getName());
+        return ResponseEntity.ok(serviceOfferingDto);
     }
 
-    @PostMapping
+    @PutMapping("/{serviceId}")
     @PreAuthorize("@masterService.isMasterOwner(#principal.name, #masterId)")
-    public String addServiceForMaster(@PathVariable Long masterId,
-                                      @Valid @ModelAttribute("newService") ServiceOfferingDto newService,
-                                      BindingResult bindingResult,
-                                      RedirectAttributes redirectAttributes, Principal principal) {
+    public ResponseEntity<ServiceOffering> updateService(@PathVariable Long masterId, @PathVariable Long serviceId, @RequestBody ServiceOfferingDto serviceDto, Principal principal) {
+        ServiceOffering updated = serviceOfferingService.updateService(serviceId, serviceDto);
+        return ResponseEntity.ok(updated);
+    }
 
-        if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.newService", bindingResult);
-            redirectAttributes.addFlashAttribute("newService", newService);
-            return "redirect:/masters/" + masterId + "/services/new";
-        }
 
-        try {
-
-            BeautyService beautyService = beautyServiceService.getById(newService.getBeautyServiceId());
-            serviceOfferingService.addService(masterId, newService, principal.getName());
-            redirectAttributes.addFlashAttribute("successMessage", "Услуга '" + beautyService.getName() + "' успешно добавлена.");
-        } catch (UserNotFoundException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Произошла ошибка при добавлении услуги.");
-        }
-
-        return "redirect:/profile";
+    @DeleteMapping("/{serviceId}")
+    @PreAuthorize("@masterService.isMasterOwner(#principal.name, #masterId)")
+    public ResponseEntity<Void> deleteService(@PathVariable Long masterId, @PathVariable Long serviceId, Principal principal) {
+        serviceOfferingService.deleteService(serviceId);
+        return ResponseEntity.noContent().build();
     }
 
 }

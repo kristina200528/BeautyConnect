@@ -134,11 +134,21 @@
                                 <@spring.formInput "registrationForm.experience" "class=\"form-control\" id=\"experience\"" "number"/>
                             </div>
 
-                            <!-- Локация -->
+<#--                            <!-- Локация &ndash;&gt;-->
+<#--                            <div class="mb-3">-->
+<#--                                <label for="location" class="form-label">Локация</label>-->
+<#--                                <@spring.formInput "registrationForm.location" "class=\"form-control\" id=\"location\"" "text"/>-->
+<#--                            </div>-->
+
+                            <!-- Вместо поля "Локация" -->
                             <div class="mb-3">
-                                <label for="location" class="form-label">Локация</label>
-                                <@spring.formInput "registrationForm.location" "class=\"form-control\" id=\"location\"" "text"/>
+                                <label for="city" class="form-label">Город</label>
+                                <input type="text" class="form-control" id="city" name="city" value="${registrationForm.city!''}" required autocomplete="off"/>
+                                <#if bindingResult?? && bindingResult.hasFieldErrors('city')>
+                                    <div class="text-danger">${bindingResult.getFieldError('city').defaultMessage}</div>
+                                </#if>
                             </div>
+
 
                             <!-- Контакты -->
                             <div class="mb-3">
@@ -154,9 +164,13 @@
                             <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
                         </div>
                     </form>
+                    <div class="mt-4 text-center">
+                        <a href="/login">Уже есть аккаунт? Войти</a>
+                    </div>
                 </div>
             </div>
         </div>
+        <p class="text-center text-muted mt-3">&copy; 2025 BeautyConnect</p>
     </div>
 </div>
 
@@ -178,7 +192,33 @@
     });
 </script>
 
-<!-- Подключаем Bootstrap JS (необходим для некоторых компонентов) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<script>
+    $(function() {
+        $("#city").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "/api/cities/search",
+                    dataType: "json",
+                    data: {
+                        q: request.term
+                    },
+                    success: function(data) {
+                        response(data);
+                    },
+                    error: function() {
+                        response([]);
+                    }
+                });
+            },
+            minLength: 2,
+            delay: 300
+        });
+    });
+</script>
+
 </body>
 </html>

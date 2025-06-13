@@ -1,4 +1,4 @@
-package ru.itis.web.controller;
+package ru.itis.web.controller.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.web.csrf.CsrfToken;

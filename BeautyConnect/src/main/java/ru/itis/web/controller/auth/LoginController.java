@@ -1,4 +1,4 @@
-package ru.itis.web.controller;
+package ru.itis.web.controller.auth;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

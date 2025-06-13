@@ -8,13 +8,13 @@ import ru.itis.entity.BeautyService;
 import ru.itis.entity.Master;
 import ru.itis.entity.ServiceOffering;
 import ru.itis.exception.BeautyServiceNotFoundException;
+import ru.itis.exception.ServiceOfferingNotFoundException;
 import ru.itis.exception.UserNotFoundException;
 import ru.itis.mapper.ServiceOfferingMapper;
 import ru.itis.repository.BeautyServiceRepository;
 import ru.itis.repository.MasterRepository;
 import ru.itis.repository.ServiceOfferingRepository;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @Service
@@ -26,6 +26,7 @@ public class ServiceOfferingService {
     private final ServiceOfferingMapper serviceOfferingMapper;
     private final BeautyServiceRepository beautyServiceRepository;
 
+    //getById
     @Transactional
     public List<ServiceOfferingDto> getServicesByMasterId(Long masterId) {
         if (!masterRepository.existsById(masterId)) {
@@ -35,24 +36,44 @@ public class ServiceOfferingService {
         return serviceOfferingMapper.mapToDtoList(services);
     }
 
+    //save
     @Transactional
-    public ServiceOfferingDto addService(Long masterId, ServiceOfferingDto serviceOfferingDto, String currentUsername) throws AccessDeniedException {
-        Master master = masterRepository.findById(masterId)
-                .orElseThrow(() -> new UserNotFoundException("Master not found with id: " + masterId));
-        checkMasterOwnership(master, currentUsername);
-
-        BeautyService beautyService = beautyServiceRepository.findById(serviceOfferingDto.getBeautyServiceId())
-                .orElseThrow(() -> new BeautyServiceNotFoundException("BeautyService not found"));
-
+    public ServiceOfferingDto addService(Long masterId, ServiceOfferingDto serviceOfferingDto, String currentUsername) {
+        Master master = masterRepository.findById(masterId).orElseThrow(() -> new UserNotFoundException("Master not found with id: " + masterId));
+        BeautyService beautyService = beautyServiceRepository.findById(serviceOfferingDto.getBeautyServiceId()).orElseThrow(() -> new BeautyServiceNotFoundException("BeautyService not found"));
         ServiceOffering newService = serviceOfferingMapper.mapToEntity(serviceOfferingDto, master, beautyService);
-
         ServiceOffering savedService = serviceOfferingRepository.save(newService);
         return serviceOfferingMapper.mapToDto(savedService);
     }
 
-    private void checkMasterOwnership(Master master, String currentUsername) throws AccessDeniedException {
-        if (!master.getUser().getUsername().equals(currentUsername)) {
-            throw new AccessDeniedException("User does not have permission to modify this master profile.");
-        }
+    public ServiceOffering findById(Long id) {
+        return serviceOfferingRepository.findById(id).orElseThrow(() -> new ServiceOfferingNotFoundException("Service offering not found"));
     }
+
+    //update
+    @Transactional
+    public ServiceOffering updateService(Long id, ServiceOfferingDto dto) {
+        ServiceOffering existingService = serviceOfferingRepository.findById(id)
+                .orElseThrow(() -> new ServiceOfferingNotFoundException("Service offering not found"));
+
+        BeautyService beautyService = beautyServiceRepository.findById(dto.getBeautyServiceId())
+                .orElseThrow(() -> new BeautyServiceNotFoundException("BeautyService not found"));
+
+        existingService.setBeautyService(beautyService);
+        existingService.setPrice(dto.getPrice());
+        existingService.setDescription(dto.getDescription());
+        existingService.setDurationMinutes(dto.getDurationMinutes());
+
+        return serviceOfferingRepository.save(existingService);
+    }
+
+    //delete
+    @Transactional
+    public void deleteService(Long id) {
+        if (!serviceOfferingRepository.existsById(id)) {
+            throw new ServiceOfferingNotFoundException("Service offering not found");
+        }
+        serviceOfferingRepository.deleteById(id);
+    }
+
 }

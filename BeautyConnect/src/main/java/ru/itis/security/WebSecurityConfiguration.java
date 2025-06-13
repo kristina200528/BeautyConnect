@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.itis.filter.BlockedUserFilter;
 import ru.itis.handler.CustomAuthenticationFailureHandler;
+import ru.itis.handler.RedirectIfAuthenticatedFilter;
 import ru.itis.security.details.UserDetailsServiceImpl;
 
 
@@ -31,9 +33,12 @@ public class WebSecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         HttpSecurity httpSecurity = http
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/master/appointments").hasRole("MASTER")
                         .requestMatchers("/register", "/login").anonymous()
-                        .requestMatchers("error").permitAll()
+                        .requestMatchers("/error", "/home").permitAll()
+                        .requestMatchers("/api/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
@@ -54,6 +59,7 @@ public class WebSecurityConfiguration {
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
+                .addFilterBefore(redirectIfAuthenticatedFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(blockedUserFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
@@ -63,6 +69,7 @@ public class WebSecurityConfiguration {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
 
@@ -72,6 +79,11 @@ public class WebSecurityConfiguration {
     @Bean
     public CustomAuthenticationFailureHandler customAuthenticationFailureHandler() {
         return new CustomAuthenticationFailureHandler();
+    }
+
+    @Bean
+    public RedirectIfAuthenticatedFilter redirectIfAuthenticatedFilter() {
+        return new RedirectIfAuthenticatedFilter();
     }
 
 

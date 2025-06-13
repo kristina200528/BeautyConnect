@@ -1,4 +1,4 @@
-package ru.itis.dictonary;
+package ru.itis.enums;
 
 public enum UserRole {
 

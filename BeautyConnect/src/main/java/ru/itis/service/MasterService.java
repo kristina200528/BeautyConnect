@@ -3,6 +3,7 @@ package ru.itis.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.itis.dto.MasterProfileDto;
+import ru.itis.entity.Appointment;
 import ru.itis.entity.Master;
 import ru.itis.entity.User;
 import ru.itis.exception.MasterNotFoundException;
@@ -18,8 +19,8 @@ public class MasterService {
     private final MasterRepository masterRepository;
     private final MasterMapper masterMapper;
 
-    public Optional<Master> findMasterByUserId(Long userId) {
-        return masterRepository.findByUserId(userId);
+    public Master findMasterByUserId(Long userId) {
+        return masterRepository.findByUserId(userId).orElseThrow(()->new MasterNotFoundException("Master not found"));
     }
 
     public MasterProfileDto getMasterById(Long id) {
@@ -35,6 +36,14 @@ public class MasterService {
     public boolean isMasterOwner(String username, Long masterId) {
         MasterProfileDto master=getMasterById(masterId);
         return master.getUsername().equals(username);
+    }
+    public Master findById(Long id){
+        return masterRepository.findById(id).orElseThrow(()->new MasterNotFoundException("Master not found"));
+    }
+
+    public boolean isNotCurrentMaster(String username, Long masterId) {
+        Master master = findById(masterId);
+        return !master.getUser().getUsername().equalsIgnoreCase(username);
     }
 
 }

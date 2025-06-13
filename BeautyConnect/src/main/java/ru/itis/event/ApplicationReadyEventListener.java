@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import ru.itis.dictonary.UserRole;
-import ru.itis.dictonary.UserStatus;
+import ru.itis.enums.UserRole;
+import ru.itis.enums.UserStatus;
 import ru.itis.repository.UserRepository;
 import ru.itis.entity.User;
 

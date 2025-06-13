@@ -1,0 +1,117 @@
+openapi: 3.0.3
+info:
+  title: BeautyConnect API
+  description: API для управления услугами мастеров
+  version: 1.0.0
+
+paths:
+  /api/masters/{masterId}/services/new:
+    post:
+      summary: Добавить новую услугу мастеру
+      description: Создаёт новую услугу и прикрепляет её к мастеру
+      tags:
+        - Услуги мастеров
+      parameters:
+        - name: masterId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID мастера
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceOfferingDto'
+      responses:
+        '200':
+          description: Услуга успешно добавлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceOfferingDto'
+        '403':
+          description: Доступ запрещён
+        '400':
+          description: Ошибка валидации
+
+  /api/masters/{masterId}/services/{serviceId}:
+    put:
+      summary: Обновить услугу мастера
+      tags:
+        - Услуги мастеров
+      parameters:
+        - name: masterId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: serviceId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceOfferingDto'
+      responses:
+        '200':
+          description: Услуга обновлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceOffering'
+        '403':
+          description: Доступ запрещён
+        '404':
+          description: Услуга не найдена
+
+    delete:
+      summary: Удалить услугу мастера
+      tags:
+        - Услуги мастеров
+      parameters:
+        - name: masterId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: serviceId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Услуга удалена
+        '403':
+          description: Доступ запрещён
+        '404':
+          description: Услуга не найдена
+
+components:
+  schemas:
+    ServiceOfferingDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Маникюр"
+        price:
+          type: integer
+          example: 1500
+        description:
+          type: string
+          example: "Классический маникюр"
+    ServiceOffering:
+      allOf:
+        - $ref: '#/components/schemas/ServiceOfferingDto'
+        - type: object
+          properties:
+            id:
+              type: integer
+              example: 1
