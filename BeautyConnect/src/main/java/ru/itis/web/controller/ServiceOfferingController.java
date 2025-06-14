@@ -4,18 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ru.itis.dto.MasterProfileDto;
 import ru.itis.dto.ServiceOfferingDto;
-import ru.itis.entity.BeautyService;
-import ru.itis.entity.Category;
 import ru.itis.entity.ServiceOffering;
-import ru.itis.service.BeautyServiceService;
-import ru.itis.service.MasterService;
 import ru.itis.service.ServiceOfferingService;
 
 import java.security.Principal;
