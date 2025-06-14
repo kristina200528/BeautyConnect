@@ -5,6 +5,29 @@ info:
   version: 1.0.0
 
 paths:
+  /api/masters/{masterId}/services:
+    get:
+      summary: Получить список всех услуг мастера
+      tags:
+        - Услуги мастеров
+      parameters:
+        - name: masterId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID мастера
+      responses:
+        '200':
+          description: Список услуг
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceOfferingDto'
+        '404':
+          description: Мастер не найден
   /api/masters/{masterId}/services/new:
     post:
       summary: Добавить новую услугу мастеру
@@ -37,6 +60,32 @@ paths:
           description: Ошибка валидации
 
   /api/masters/{masterId}/services/{serviceId}:
+    get:
+      summary: Получить информацию об услуге мастера
+      tags:
+        - Услуги мастеров
+      parameters:
+        - name: masterId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID мастера
+        - name: serviceId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID услуги
+      responses:
+        '200':
+          description: Информация об услуге
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceOfferingDto'
+        '404':
+          description: Услуга не найдена
     put:
       summary: Обновить услугу мастера
       tags:

@@ -11,8 +11,6 @@ import java.util.List;
 
 import org.springframework.web.util.UriComponentsBuilder;
 
-
-
 @Service
 @RequiredArgsConstructor
 public class CitySearchService {
@@ -27,7 +25,7 @@ public class CitySearchService {
                 .queryParam("format", "json")
                 .queryParam("addressdetails", "1")
                 .queryParam("limit", "10")
-                .queryParam("accept-language", "ru") // Для русских названий, если есть
+                .queryParam("accept-language", "ru")
                 .build()
                 .toUriString();
 

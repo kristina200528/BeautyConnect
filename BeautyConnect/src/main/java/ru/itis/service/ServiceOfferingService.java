@@ -26,7 +26,7 @@ public class ServiceOfferingService {
     private final ServiceOfferingMapper serviceOfferingMapper;
     private final BeautyServiceRepository beautyServiceRepository;
 
-    //getById
+    //read
     @Transactional
     public List<ServiceOfferingDto> getServicesByMasterId(Long masterId) {
         if (!masterRepository.existsById(masterId)) {
@@ -46,6 +46,7 @@ public class ServiceOfferingService {
         return serviceOfferingMapper.mapToDto(savedService);
     }
 
+    //read
     public ServiceOffering findById(Long id) {
         return serviceOfferingRepository.findById(id).orElseThrow(() -> new ServiceOfferingNotFoundException("Service offering not found"));
     }
@@ -75,5 +76,13 @@ public class ServiceOfferingService {
         }
         serviceOfferingRepository.deleteById(id);
     }
+
+    //read
+    @Transactional
+    public ServiceOfferingDto getServiceByIdAndMasterId(Long serviceId, Long masterId) {
+        ServiceOffering service = serviceOfferingRepository.findByIdAndMasterId(serviceId, masterId).orElseThrow(() -> new ServiceOfferingNotFoundException("Service offering not found with id " + serviceId + " and masterId " + masterId));
+        return serviceOfferingMapper.mapToDto(service);
+    }
+
 
 }

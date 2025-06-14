@@ -38,6 +38,20 @@ public class ServiceOfferingController {
         return ResponseEntity.ok(serviceOfferingDto);
     }
 
+    @GetMapping
+    @PreAuthorize("@masterService.isMasterOwner(#principal.name, #masterId)")
+    public ResponseEntity<List<ServiceOfferingDto>> getAllServicesForMaster(@PathVariable Long masterId, Principal principal) {
+        List<ServiceOfferingDto> services = serviceOfferingService.getServicesByMasterId(masterId);
+        return ResponseEntity.ok(services);
+    }
+
+    @GetMapping("/{serviceId}")
+    @PreAuthorize("@masterService.isMasterOwner(#principal.name, #masterId)")
+    public ResponseEntity<ServiceOfferingDto> getServiceById(@PathVariable Long masterId, @PathVariable Long serviceId, Principal principal) {
+        ServiceOfferingDto service = serviceOfferingService.getServiceByIdAndMasterId(serviceId, masterId);
+        return ResponseEntity.ok(service);
+    }
+
     @PutMapping("/{serviceId}")
     @PreAuthorize("@masterService.isMasterOwner(#principal.name, #masterId)")
     public ResponseEntity<ServiceOffering> updateService(@PathVariable Long masterId, @PathVariable Long serviceId, @RequestBody ServiceOfferingDto serviceDto, Principal principal) {
